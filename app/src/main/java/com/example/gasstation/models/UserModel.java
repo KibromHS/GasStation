@@ -6,13 +6,15 @@ import com.google.gson.Gson;
 
 import java.util.List;
 
-public class User {
+public class UserModel {
     private String userName;
+    private String phoneNumber;
     private List<GasStationModel> favoriteStations;
     private List<String> emergencyContacts;
 
-    public User(String userName, List<GasStationModel> favoriteStations, List<String> emergencyContacts) {
+    public UserModel(String userName, String phoneNumber, List<GasStationModel> favoriteStations, List<String> emergencyContacts) {
         this.userName = userName;
+        this.phoneNumber = phoneNumber;
         this.favoriteStations = favoriteStations;
         this.emergencyContacts = emergencyContacts;
     }
@@ -23,6 +25,14 @@ public class User {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public List<GasStationModel> getFavoriteStations() {
@@ -41,8 +51,8 @@ public class User {
         this.emergencyContacts = emergencyContacts;
     }
 
-    public User copy(@Nullable String userName, @Nullable List<GasStationModel> favoriteStations, @Nullable List<String> emergencyContacts) {
-        return new User(userName == null ? this.userName : userName, favoriteStations == null ? this.favoriteStations : favoriteStations, emergencyContacts == null ? this.emergencyContacts : emergencyContacts);
+    public UserModel copy(@Nullable String userName, @Nullable String phoneNumber, @Nullable List<GasStationModel> favoriteStations, @Nullable List<String> emergencyContacts) {
+        return new UserModel(userName == null ? this.userName : userName, phoneNumber == null ? this.phoneNumber : phoneNumber, favoriteStations == null ? this.favoriteStations : favoriteStations, emergencyContacts == null ? this.emergencyContacts : emergencyContacts);
     }
 
     public String toJson() {
@@ -50,8 +60,8 @@ public class User {
         return gson.toJson(this);
     }
 
-    public static User fromJson(String json) {
+    public static UserModel fromJson(String json) {
         Gson gson = new Gson();
-        return gson.fromJson(json, User.class);
+        return gson.fromJson(json, UserModel.class);
     }
 }
