@@ -5,11 +5,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SignUpActivity extends AppCompatActivity {
     private TextView toLoginBtn;
     private Button signupBtn;
+    private EditText edUserName, edPassword, edConfirmPassword;
+    private CheckBox cbRememberMe;
+
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,8 +26,7 @@ public class SignUpActivity extends AppCompatActivity {
         initView();
 
         signupBtn.setOnClickListener(view -> {
-            Intent i = new Intent(SignUpActivity.this, MainActivity.class);
-            startActivity(i);
+
         });
 
         toLoginBtn.setOnClickListener(view -> {

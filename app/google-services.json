@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "345278155137",
+    "project_id": "gasstation-a79cd",
+    "storage_bucket": "gasstation-a79cd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345278155137:android:0e11bcfa6b9ef94f9b0080",
+        "android_client_info": {
+          "package_name": "com.example.gasstation"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrmkeJaZoGVJ2L2w-qI4kSFDLRgk30ARM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

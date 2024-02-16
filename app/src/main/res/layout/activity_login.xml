@@ -25,14 +25,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_location" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="GAS MAP"
-            android:textStyle="bold"
             android:fontFamily="sans-serif-medium"
+            android:text="GAS STATION"
+            android:textColor="@color/white"
             android:textSize="32sp"
-            android:textColor="@color/white" />
+            android:textStyle="bold" />
     </LinearLayout>
 
     <androidx.cardview.widget.CardView

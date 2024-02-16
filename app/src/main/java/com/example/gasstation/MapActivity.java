@@ -5,8 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -21,6 +25,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,7 +40,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final String FINE_LOCATION = android.Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = android.Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int REQUEST_CODE = 444;
-    private static final float DEFAULT_ZOOM = 15;
+    private static final float DEFAULT_ZOOM = 16;
+    private static final LatLng ADDIS_ABABA = new LatLng(9.0192, 38.7525);
 
     private SearchView searchView;
     private ImageView gpsBtn;
@@ -73,7 +80,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Geocoder geocoder = new Geocoder(this);
         List<Address> list = new ArrayList<>();
         try {
-            list = geocoder.getFromLocationName(query, 1);
+            list = geocoder.getFromLocationName(query, 50);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -99,6 +106,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                 moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), "My Location");
                             } else {
                                 Toast.makeText(MapActivity.this, "Null location", Toast.LENGTH_SHORT).show();
+                                moveCamera(ADDIS_ABABA, "My Location");
                             }
                         } else {
                             Toast.makeText(MapActivity.this, "Unable to get current location", Toast.LENGTH_SHORT).show();
@@ -113,11 +121,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private void moveCamera(LatLng latLng, String title) {
         if (!title.equals("My Location")) {
-            MarkerOptions options = new MarkerOptions().position(latLng).title(title);
-            mMap.addMarker(options);
+            mMap.addMarker(getMarkerOptions(latLng, title));
         }
-
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
+    }
+
+    private MarkerOptions getMarkerOptions(LatLng latLng, String title) {
+        final int height = 130;
+        final int width = 88;
+        BitmapDrawable drawable = (BitmapDrawable) ResourcesCompat.getDrawable(getResources(), R.drawable.app_icon, null);
+        assert drawable != null;
+        Bitmap stationMarker = Bitmap.createScaledBitmap(drawable.getBitmap(), width, height, false);
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(stationMarker);
+
+        return new MarkerOptions().position(latLng).title(title).icon(icon);
     }
 
     private void initMap() {
