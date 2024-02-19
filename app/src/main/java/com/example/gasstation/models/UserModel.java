@@ -7,16 +7,24 @@ import com.google.gson.Gson;
 import java.util.List;
 
 public class UserModel {
+    private final String userId;
     private String userName;
     private String phoneNumber;
+    private String profileImageUrl;
     private List<GasStationModel> favoriteStations;
     private List<String> emergencyContacts;
 
-    public UserModel(String userName, String phoneNumber, List<GasStationModel> favoriteStations, List<String> emergencyContacts) {
+    public UserModel(String userId, String userName, String phoneNumber, String profileImageUrl, List<GasStationModel> favoriteStations, List<String> emergencyContacts) {
+        this.userId = userId;
         this.userName = userName;
         this.phoneNumber = phoneNumber;
+        this.profileImageUrl = profileImageUrl;
         this.favoriteStations = favoriteStations;
         this.emergencyContacts = emergencyContacts;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public String getUserName() {
@@ -35,6 +43,14 @@ public class UserModel {
         this.phoneNumber = phoneNumber;
     }
 
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
     public List<GasStationModel> getFavoriteStations() {
         return favoriteStations;
     }
@@ -51,8 +67,15 @@ public class UserModel {
         this.emergencyContacts = emergencyContacts;
     }
 
-    public UserModel copy(@Nullable String userName, @Nullable String phoneNumber, @Nullable List<GasStationModel> favoriteStations, @Nullable List<String> emergencyContacts) {
-        return new UserModel(userName == null ? this.userName : userName, phoneNumber == null ? this.phoneNumber : phoneNumber, favoriteStations == null ? this.favoriteStations : favoriteStations, emergencyContacts == null ? this.emergencyContacts : emergencyContacts);
+    public UserModel copy(@Nullable String userName, @Nullable String phoneNumber, @Nullable String profileImageUrl, @Nullable List<GasStationModel> favoriteStations, @Nullable List<String> emergencyContacts) {
+        UserModel user = new UserModel(this.userId, this.userName, this.phoneNumber, this.profileImageUrl, this.favoriteStations, this.emergencyContacts);
+        if (userName != null) user.setUserName(userName);
+        if (phoneNumber != null) user.setPhoneNumber(phoneNumber);
+        if (profileImageUrl != null) user.setProfileImageUrl(profileImageUrl);
+        if (favoriteStations != null) user.setFavoriteStations(favoriteStations);
+        if (emergencyContacts != null) user.setEmergencyContacts(emergencyContacts);
+
+        return user;
     }
 
     public String toJson() {

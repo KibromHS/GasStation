@@ -6,10 +6,12 @@
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
-        motion:duration="1000"
+        motion:duration="3000"
         motion:autoTransition="animateToEnd">
        <KeyFrameSet>
        </KeyFrameSet>
+        <OnSwipe motion:maxAcceleration="0.1"
+            motion:maxVelocity="1.02" />
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
@@ -64,7 +66,8 @@
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
-            android:scaleX="1" />
+            android:scaleX="1"
+            android:scaleY="1" />
         <Constraint
             android:id="@+id/logoWhite"
             motion:layout_constraintEnd_toEndOf="parent"

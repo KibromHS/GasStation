@@ -11,10 +11,10 @@ public class GasStationModel {
     private String imageUrl;
     private boolean isOpen;
     private String queueLength;
-    private List<Map<String, Object>> ratesReviews;
-    private List<Map<String, Double>> fuels; // fuel types available and their prices
+    private List<Map<String, Object>> ratesReviews; // [{"userID": "", "rating": 0, "review": ""}]
+    private List<Map<String, Object>> fuels; // [{"fuelType": "petroleum", "price": 70}]
 
-    public GasStationModel(String stationId, LatLng location, String imageUrl, boolean isOpen, String queueLength, List<Map<String, Object>> ratesReviews, List<Map<String, Double>> fuels) {
+    public GasStationModel(String stationId, LatLng location, String imageUrl, boolean isOpen, String queueLength, List<Map<String, Object>> ratesReviews, List<Map<String, Object>> fuels) {
         this.stationId = stationId;
         this.location = location;
         this.imageUrl = imageUrl;
@@ -72,11 +72,11 @@ public class GasStationModel {
         this.ratesReviews = ratesReviews;
     }
 
-    public List<Map<String, Double>> getFuels() {
+    public List<Map<String, Object>> getFuels() {
         return fuels;
     }
 
-    public void setFuels(List<Map<String, Double>> fuels) {
+    public void setFuels(List<Map<String, Object>> fuels) {
         this.fuels = fuels;
     }
 }
