@@ -2,20 +2,23 @@ package com.example.gasstation.models;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class GasStationModel {
-    private String stationId;
+public class GasStationModel implements Serializable {
+    private final String stationId;
+    private String stationName;
     private LatLng location;
     private String imageUrl;
     private boolean isOpen;
     private String queueLength;
     private List<Map<String, Object>> ratesReviews; // [{"userID": "", "rating": 0, "review": ""}]
-    private List<Map<String, Object>> fuels; // [{"fuelType": "petroleum", "price": 70}]
+    private List<Map<String, Object>> fuels; // [{"fuelType": "petroleum", "pricePerLiter": 70}]
 
-    public GasStationModel(String stationId, LatLng location, String imageUrl, boolean isOpen, String queueLength, List<Map<String, Object>> ratesReviews, List<Map<String, Object>> fuels) {
+    public GasStationModel(String stationId, String stationName, LatLng location, String imageUrl, boolean isOpen, String queueLength, List<Map<String, Object>> ratesReviews, List<Map<String, Object>> fuels) {
         this.stationId = stationId;
+        this.stationName = stationName;
         this.location = location;
         this.imageUrl = imageUrl;
         this.isOpen = isOpen;
@@ -28,8 +31,12 @@ public class GasStationModel {
         return stationId;
     }
 
-    public void setStationId(String stationId) {
-        this.stationId = stationId;
+    public String getStationName() {
+        return stationName;
+    }
+
+    public void setStationName(String stationName) {
+        this.stationName = stationName;
     }
 
     public LatLng getLocation() {

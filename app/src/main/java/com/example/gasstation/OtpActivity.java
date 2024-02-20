@@ -21,6 +21,7 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -132,9 +133,10 @@ public class OtpActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Intent i = new Intent(OtpActivity.this, SignUpActivity.class);
                     i.putExtra("phone", phoneNumber);
+                    i.putExtra("userId", Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
                     startActivity(i);
                 } else {
-                    AndroidUtil.showToast(getApplicationContext(), "OTP verification failed");
+                    AndroidUtil.showToast(getApplicationContext(), "OTP verification failed to sign in");
                 }
             }
         });

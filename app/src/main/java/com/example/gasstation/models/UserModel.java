@@ -11,10 +11,10 @@ public class UserModel {
     private String userName;
     private String phoneNumber;
     private String profileImageUrl;
-    private List<GasStationModel> favoriteStations;
+    private List<String> favoriteStations; // ["stationId"]
     private List<String> emergencyContacts;
 
-    public UserModel(String userId, String userName, String phoneNumber, String profileImageUrl, List<GasStationModel> favoriteStations, List<String> emergencyContacts) {
+    public UserModel(String userId, String userName, String phoneNumber, String profileImageUrl, List<String> favoriteStations, List<String> emergencyContacts) {
         this.userId = userId;
         this.userName = userName;
         this.phoneNumber = phoneNumber;
@@ -51,11 +51,11 @@ public class UserModel {
         this.profileImageUrl = profileImageUrl;
     }
 
-    public List<GasStationModel> getFavoriteStations() {
+    public List<String> getFavoriteStations() {
         return favoriteStations;
     }
 
-    public void setFavoriteStations(List<GasStationModel> favoriteStations) {
+    public void setFavoriteStations(List<String> favoriteStations) {
         this.favoriteStations = favoriteStations;
     }
 
@@ -67,7 +67,7 @@ public class UserModel {
         this.emergencyContacts = emergencyContacts;
     }
 
-    public UserModel copy(@Nullable String userName, @Nullable String phoneNumber, @Nullable String profileImageUrl, @Nullable List<GasStationModel> favoriteStations, @Nullable List<String> emergencyContacts) {
+    public UserModel copy(@Nullable String userName, @Nullable String phoneNumber, @Nullable String profileImageUrl, @Nullable List<String> favoriteStations, @Nullable List<String> emergencyContacts) {
         UserModel user = new UserModel(this.userId, this.userName, this.phoneNumber, this.profileImageUrl, this.favoriteStations, this.emergencyContacts);
         if (userName != null) user.setUserName(userName);
         if (phoneNumber != null) user.setPhoneNumber(phoneNumber);

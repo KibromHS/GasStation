@@ -43,6 +43,7 @@ public class SignUpActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     private Uri imageUri;
+    private String userId;
 
     private final ActivityResultLauncher<Intent> imagePickActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -65,62 +66,68 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         initView();
 
-        addProfileImage.setOnClickListener(view -> {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            imagePickActivityResultLauncher.launch(intent);
+        addProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                imagePickActivityResultLauncher.launch(intent);
+            }
         });
 
-        registerBtn.setOnClickListener(view -> {
-            setInProgress(true);
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setInProgress(true);
 
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_HH_mm_ss", Locale.ENGLISH);
-            Date now = new Date();
-            String fileName = formatter.format(now);
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_HH_mm_ss", Locale.ENGLISH);
+                Date now = new Date();
+                String fileName = formatter.format(now);
 
-            StorageReference ref = FirebaseUtil.getStorageReference("UserImage/" + fileName);
-            ref.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            String fullName = edFullName.getText().toString();
-                            if (TextUtils.isEmpty(fullName)) {
-                                AndroidUtil.showToast(getApplicationContext(), "Fill in your full name");
+                StorageReference ref = FirebaseUtil.getStorageReference("UserImage/" + fileName);
+                ref.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                String fullName = edFullName.getText().toString();
+                                if (TextUtils.isEmpty(fullName)) {
+                                    AndroidUtil.showToast(getApplicationContext(), "Fill in your full name");
+                                    setInProgress(false);
+                                    return;
+                                }
+
+                                Map<String, Object> data = new HashMap<>();
+                                data.put("userId", userId);
+                                data.put("userName", fullName);
+                                data.put("phoneNumber", getIntent().getStringExtra("phone"));
+                                data.put("profileImageUrl", uri.toString());
+                                data.put("favoriteStations", FieldValue.arrayUnion());
+                                data.put("emergencyContacts", FieldValue.arrayUnion());
+
+                                FirebaseUtil.addUser(userId, data);
+
                                 setInProgress(false);
-                                return;
+                                Intent i = new Intent(SignUpActivity.this, MainActivity.class);
+                                startActivity(i);
+                                finish();
                             }
-
-                            Map<String, Object> data = new HashMap<>();
-                            data.put("userId", FirebaseUtil.getCurrentUser().getUid());
-                            data.put("userName", fullName);
-                            data.put("phoneNumber", FirebaseUtil.getCurrentUser().getPhoneNumber());
-                            data.put("profileImageUrl", uri.toString());
-                            data.put("favoriteStations", FieldValue.arrayUnion());
-                            data.put("emergencyContacts", FieldValue.arrayUnion());
-
-                            FirebaseUtil.addUser(data);
-
-                            setInProgress(false);
-                            Intent i = new Intent(SignUpActivity.this, MainActivity.class);
-                            startActivity(i);
-                            finish();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            setInProgress(false);
-                            AndroidUtil.showToast(getApplicationContext(), "Couldn't get download url");
-                        }
-                    });
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    setInProgress(false);
-                    AndroidUtil.showToast(getApplicationContext(), "Couldn't upload data");
-                }
-            });
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                setInProgress(false);
+                                AndroidUtil.showToast(getApplicationContext(), "Couldn't get download url");
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        setInProgress(false);
+                        AndroidUtil.showToast(getApplicationContext(), "Couldn't upload data");
+                    }
+                });
+            }
         });
     }
 
@@ -129,6 +136,9 @@ public class SignUpActivity extends AppCompatActivity {
         edFullName = findViewById(R.id.edFullName);
         registerBtn = findViewById(R.id.registerBtn);
         progressBar = findViewById(R.id.login_progress_bar);
+        setInProgress(false);
+
+        userId = getIntent().getStringExtra("userId");
     }
 
     private void setInProgress(boolean inProgress) {

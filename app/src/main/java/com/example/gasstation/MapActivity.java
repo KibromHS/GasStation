@@ -190,6 +190,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
+//            mMap.getUiSettings().setCompassEnabled(false);
             initSearchView();
         }
     }

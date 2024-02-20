@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.gasstation.models.UserModel;
+import com.example.gasstation.utils.FirebaseUtil;
+import com.example.gasstation.utils.UserPreferences;
+
 public class MainActivity extends AppCompatActivity {
     private TextView toMapBtn;
     private ImageView logoutBtn;
@@ -17,13 +21,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initView();
 
+//        UserModel userModel = FirebaseUtil.getUser();
+//
+//        if (userModel == null) {
+//            Intent i = new Intent(this, LoginPhoneActivity.class);
+//            startActivity(i);
+//            finish();
+//            return;
+//        }
+//        UserPreferences.init(getApplicationContext());
+//        UserPreferences.setUser(userModel);
+
         toMapBtn.setOnClickListener(view -> {
             Intent i = new Intent(MainActivity.this, MapActivity.class);
             startActivity(i);
         });
 
         logoutBtn.setOnClickListener(view -> {
-            Intent i = new Intent(MainActivity.this, LoginActivity.class);
+            FirebaseUtil.signOut();
+            Intent i = new Intent(MainActivity.this, LoginPhoneActivity.class);
             startActivity(i);
         });
     }
